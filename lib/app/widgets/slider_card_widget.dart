@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -13,24 +15,24 @@ import '../screens/manga_details_screen.dart';
 Widget sliderCardWidget(List<FeedEntity> mangaList) {
   return Container(
     height: 200,
-    margin: EdgeInsets.symmetric(vertical: Sizes.md),
+    margin: const EdgeInsets.symmetric(vertical: Sizes.md),
     child: StatefulBuilder(
       builder: (context, setState) {
-        PageController _pageController = PageController(viewportFraction: 0.8);
+        PageController pageController = PageController(viewportFraction: 0.8);
 
         // Auto slide timer
         Future.delayed(Duration.zero, () {
-          Timer.periodic(Duration(seconds: 3), (timer) {
-            if (_pageController.hasClients) {
-              if (_pageController.page == 7) {
-                _pageController.animateToPage(
+          Timer.periodic(const Duration(seconds: 3), (timer) {
+            if (pageController.hasClients) {
+              if (pageController.page == 7) {
+                pageController.animateToPage(
                   0,
-                  duration: Duration(milliseconds: 500),
+                  duration: const Duration(milliseconds: 500),
                   curve: Curves.easeInOut,
                 );
               } else {
-                _pageController.nextPage(
-                  duration: Duration(milliseconds: 500),
+                pageController.nextPage(
+                  duration: const Duration(milliseconds: 500),
                   curve: Curves.easeInOut,
                 );
               }
@@ -39,7 +41,7 @@ Widget sliderCardWidget(List<FeedEntity> mangaList) {
         });
 
         return PageView.builder(
-          controller: _pageController,
+          controller: pageController,
           itemCount: 10,
           itemBuilder: (ctx, idx) {
             final promo = mangaList[idx];
@@ -48,7 +50,7 @@ Widget sliderCardWidget(List<FeedEntity> mangaList) {
               children: [
                 Container(
                   width: MediaQuery.of(context).size.width * 0.75,
-                  margin: EdgeInsets.all(5),
+                  margin: const EdgeInsets.all(5),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(Sizes.borderRadiusLg),
                     image: DecorationImage(
@@ -74,7 +76,7 @@ Widget sliderCardWidget(List<FeedEntity> mangaList) {
                   child: Transform.rotate(
                     angle:
                         15 * (3.14159 / 180), // Convert 45 degrees to radians
-                    child: Container(
+                    child: SizedBox(
                       height: 150,
                       width: 100,
                       child: Image.network(promo.image),
@@ -124,7 +126,7 @@ Widget sliderCardWidget(List<FeedEntity> mangaList) {
                 Positioned(
                   top: 10,
                   left: 10,
-                  child: Container(
+                  child: SizedBox(
                     width: MediaQuery.of(context).size.width *
                         0.55, // Limit width to 60% of screen
                     child: Text(

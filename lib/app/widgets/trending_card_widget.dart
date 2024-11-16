@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mochi/domain/entities/feed_entity.dart';
@@ -11,7 +13,7 @@ import '../screens/manga_details_screen.dart';
 Widget trendingCardWidget(List<FeedEntity> mangaList) {
   return Container(
     height: 300,
-    padding: EdgeInsets.all(Sizes.md),
+    padding: const EdgeInsets.all(Sizes.md),
     child: ListView.builder(
       scrollDirection: Axis.horizontal,
       itemCount: mangaList.length < 9 ? mangaList.length : 9,
@@ -36,7 +38,7 @@ Widget trendingCardWidget(List<FeedEntity> mangaList) {
           },
           child: Container(
             width: 200,
-            margin: EdgeInsets.only(right: Sizes.md),
+            margin: const EdgeInsets.only(right: Sizes.md),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(Sizes.borderRadiusLg),
             ),
@@ -78,12 +80,12 @@ Widget trendingCardWidget(List<FeedEntity> mangaList) {
                     ),
                   ),
                 ),
-                Container(
+                SizedBox(
                   width: 160,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Container(
+                      SizedBox(
                         height: 200,
                         child: Image.network(
                           mangaList[index].image,

@@ -22,4 +22,6 @@ abstract class LocalRepository {
   Future<void> registerUser(UserEntity user);
   Future<void> loginUser(String email, String password);
   Future<void> logoutUser();
+  Future<UserEntity> getUser();
+  Future<bool> isSignIn();
 }

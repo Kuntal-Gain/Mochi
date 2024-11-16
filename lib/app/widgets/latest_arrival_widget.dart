@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -10,7 +12,7 @@ import '../screens/manga_details_screen.dart';
 
 Widget latestArrivalWidget(List<FeedEntity> mangaList) {
   return Container(
-    margin: EdgeInsets.all(10),
+    margin: const EdgeInsets.all(10),
     decoration: BoxDecoration(
       borderRadius: BorderRadius.circular(12),
       color: AppColors.primary,
@@ -27,7 +29,7 @@ Widget latestArrivalWidget(List<FeedEntity> mangaList) {
         ),
         Container(
           height: 300,
-          padding: EdgeInsets.all(Sizes.md),
+          padding: const EdgeInsets.all(Sizes.md),
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             itemCount: mangaList.length,
@@ -53,14 +55,14 @@ Widget latestArrivalWidget(List<FeedEntity> mangaList) {
                 },
                 child: Container(
                   width: 140,
-                  margin: EdgeInsets.only(right: Sizes.md),
+                  margin: const EdgeInsets.only(right: Sizes.md),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(Sizes.borderRadiusLg),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Container(
+                      SizedBox(
                         height: 200,
                         child: Image.network(
                           mangaData.image,

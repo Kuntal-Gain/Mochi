@@ -1,6 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
+import 'package:mochi/app/cubit/auth/auth_cubit.dart';
+import 'package:mochi/app/cubit/creds/creds_cubit.dart';
 import 'package:mochi/app/cubit/feed/feed_cubit.dart';
 import 'package:mochi/data/repos/local_repository_impl.dart';
+import 'package:mochi/domain/usecases/user/get_user_usecase.dart';
+import 'package:mochi/domain/usecases/user/is_sign_in_usecase.dart';
 
 import 'app/cubit/chapter/chapter_cubit.dart';
 import 'app/cubit/manga/manga_cubit.dart';
@@ -43,13 +49,23 @@ Future<void> init() async {
       getChapterUsecase: sl.call(),
     ),
   );
+
+  sl.registerFactory(() => UserCubit(getUserUsecase: sl.call()));
+
   sl.registerFactory(
-    () => UserCubit(
-      loginUserUseCase: sl.call(),
-      signupUserUseCase: sl.call(),
-      logoutUserUseCase: sl.call(),
+    () => AuthCubit(
+      signOutUsecase: sl.call(),
+      isSignInUsecase: sl.call(),
     ),
   );
+
+  sl.registerFactory(
+    () => CredsCubit(
+      registerUserUseCase: sl.call(),
+      loginUserUseCase: sl.call(),
+    ),
+  );
+
   // usecases
   sl.registerLazySingleton(() => GetAllMangaListUsecase(sl.call()));
   sl.registerLazySingleton(() => GetTrendingMangaListUsecase(sl.call()));
@@ -61,10 +77,18 @@ Future<void> init() async {
   sl.registerLazySingleton(() => LoginUserUseCase(sl.call()));
   sl.registerLazySingleton(() => RegisterUserUseCase(sl.call()));
   sl.registerLazySingleton(() => LogoutUserUseCase(sl.call()));
+  sl.registerLazySingleton(() => GetUserUsecase(sl.call()));
+  sl.registerLazySingleton(() => IsSignInUsecase(sl.call()));
+
   // repository
   sl.registerLazySingleton<LocalRepository>(
       () => LocalRepositoryImpl(dataSource: sl.call())); // local
-  sl.registerLazySingleton<RemoteDataSource>(
-      () => RemoteDataSourceImpl()); // remote
+  sl.registerLazySingleton<RemoteDataSource>(() =>
+      RemoteDataSourceImpl(firestore: sl.call(), auth: sl.call())); // remote
   // datasource
+  final firebaseFirestore = FirebaseFirestore.instance;
+  final firebaseAuth = FirebaseAuth.instance;
+
+  sl.registerLazySingleton(() => firebaseFirestore);
+  sl.registerLazySingleton(() => firebaseAuth);
 }

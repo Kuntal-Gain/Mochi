@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "884157981994",
+    "project_id": "mochi-manga",
+    "storage_bucket": "mochi-manga.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:884157981994:android:4f4ffcbc0903761761aa53",
+        "android_client_info": {
+          "package_name": "com.example.mochi"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBt8eElT3vDefmwByXZvvbY4fz7yQC1vTo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

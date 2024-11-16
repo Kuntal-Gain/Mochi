@@ -1,15 +1,34 @@
+// ignore_for_file: overridden_fields
+
 import 'package:mochi/domain/entities/manga_entity.dart';
 
 class MangaModel extends MangaEntity {
+  @override
+  final String imageUrl;
+  @override
+  final String name;
+  @override
+  final String author;
+  @override
+  final String status;
+  @override
+  final String updated;
+  @override
+  final String view;
+  @override
+  final List<String> genres;
+  @override
+  final List chapterList;
+
   const MangaModel({
-    required String imageUrl,
-    required String name,
-    required String author,
-    required String status,
-    required String updated,
-    required String view,
-    required List<String> genres,
-    required List chapterList,
+    required this.imageUrl,
+    required this.name,
+    required this.author,
+    required this.status,
+    required this.updated,
+    required this.view,
+    required this.genres,
+    required this.chapterList,
   }) : super(
           imageUrl: imageUrl,
           name: name,

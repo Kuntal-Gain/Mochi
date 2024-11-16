@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 class UserEntity extends Equatable {
+  final String uid;
   final String username;
   final String email;
   final List history;
@@ -17,6 +18,7 @@ class UserEntity extends Equatable {
     required this.favouriteManga,
     required this.timeSpent,
     required this.password,
+    required this.uid,
   });
 
   @override
@@ -28,5 +30,6 @@ class UserEntity extends Equatable {
         favouriteManga,
         timeSpent,
         password,
+        uid,
       ];
 }

@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:mochi/domain/entities/chapter_entity.dart';
 import 'package:mochi/domain/entities/user_entity.dart';
 
@@ -10,8 +12,17 @@ import '../models/feed_model.dart';
 import 'package:http/http.dart' as http;
 
 import '../models/manga_model.dart';
+import '../models/user_model.dart';
 
 class RemoteDataSourceImpl implements RemoteDataSource {
+  final FirebaseAuth _auth;
+  final FirebaseFirestore _firestore;
+
+  RemoteDataSourceImpl(
+      {required FirebaseAuth auth, required FirebaseFirestore firestore})
+      : _auth = auth,
+        _firestore = firestore;
+
   @override
   Future<List<FeedModel>> getTrendingMangaList() async {
     try {
@@ -152,66 +163,103 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   @override
   Future<void> loginUser(String email, String password) async {
     try {
-      final response = await http.post(
-        Uri.parse('https://mochi-backend-production.up.railway.app/v1/user/login'),
-        headers: {'Content-Type': 'application/json'},
-        body: json.encode({
-          'email': email,
-          'password': password,
-        }),
-      );
-
-      if (response.statusCode == 200) {
-        return;
-      } else {
-        throw Exception('Failed to login user');
+      if (email.isNotEmpty || password.isNotEmpty) {
+        await _auth.signInWithEmailAndPassword(
+          email: email,
+          password: password,
+        );
       }
-    } catch (e) {
-      throw Exception('Error logging in user: $e');
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        print(e.code);
+      } else if (e.code == 'wrong-password') {
+        print(e.code);
+      }
     }
   }
 
   @override
   Future<void> logoutUser() async {
-    try {
-      final response = await http.post(
-        Uri.parse('https://mochi-backend-production.up.railway.app/v1/user/logout'),
-        headers: {'Content-Type': 'application/json'},
-      );
-
-      if (response.statusCode == 200) {
-        return;
-      } else {
-        throw Exception('Failed to logout user');
-      }
-    } catch (e) {
-      throw Exception('Error logging out user: $e');
+    final user = _auth.currentUser;
+    if (user != null) {
+      await _auth.signOut();
     }
   }
 
   @override
   Future<void> registerUser(UserEntity user) async {
     try {
-      final response = await http.post(
-        Uri.parse('https://mochi-backend-production.up.railway.app/v1/user/register'),
-        headers: {'Content-Type': 'application/json'},
-        body: json.encode({
-          'username': user.username,
-          'email': user.email,
-          'history': user.history,
-          'readingList': user.readingList,
-          'favouriteManga': user.favouriteManga,
-          'timeSpent': user.timeSpent,
-        }),
-      );
+      if (user.email.isNotEmpty || user.password.isNotEmpty) {
+        await _auth
+            .createUserWithEmailAndPassword(
+          email: user.email,
+          password: user.password,
+        )
+            .then((value) async {
+          if (value.user?.uid != null) {
+            final userCollection = _firestore.collection('users');
 
-      if (response.statusCode == 200) {
+            final uid = FirebaseAuth.instance.currentUser?.uid;
+
+            userCollection.doc(uid).get().then((newDoc) {
+              final newUser = UserModel(
+                username: user.username,
+                email: user.email,
+                history: user.history,
+                readingList: user.readingList,
+                favouriteManga: user.favouriteManga,
+                timeSpent: user.timeSpent,
+                password: user.password,
+                uid: uid!,
+              ).toJson();
+
+              if (!newDoc.exists) {
+                userCollection.doc(uid).set(newUser);
+              } else {
+                userCollection.doc(uid).update(newUser);
+              }
+            }).catchError((err) {
+              print(err.toString());
+            });
+          }
+          print("Account Creation Successful");
+        });
+
         return;
-      } else {
-        throw Exception('Failed to register user');
       }
-    } catch (e) {
-      throw Exception('Error registering user: $e');
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'email-already-in-use') {
+        print(e.code);
+      } else {
+        print('Something went wrong');
+      }
     }
   }
+
+  @override
+  Future<UserEntity> getUser() async {
+    try {
+      // Get the currently logged-in user's UID
+      final User? currentUser = _auth.currentUser;
+      if (currentUser == null) {
+        throw Exception("No user is currently logged in.");
+      }
+
+      // Fetch the user document from Firestore
+      DocumentSnapshot userDoc =
+          await _firestore.collection('users').doc(currentUser.uid).get();
+
+      if (!userDoc.exists) {
+        throw Exception("User not found in Firestore.");
+      }
+
+      // Parse the document data into a UserEntity object
+      return UserModel.fromJson(userDoc.data() as Map<String, dynamic>);
+    } catch (e) {
+      throw Exception("Failed to fetch user: $e");
+    }
+  }
+
+  @override
+  Future<bool> isSignIn() async => _auth.currentUser?.uid != null;
 }

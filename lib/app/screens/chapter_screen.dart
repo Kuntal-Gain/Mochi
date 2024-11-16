@@ -149,7 +149,7 @@ class _ChapterScreenState extends State<ChapterScreen> {
                     minScale: 0.5, // Allow zooming out
                     maxScale: 5.0, // Increased max zoom
                     boundaryMargin:
-                        EdgeInsets.all(20), // Add margin for panning
+                        const EdgeInsets.all(20), // Add margin for panning
                     panEnabled: true, // Enable panning
                     scaleEnabled: true, // Enable scaling/zooming
                     child: Column(

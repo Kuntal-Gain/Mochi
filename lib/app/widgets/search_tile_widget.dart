@@ -7,7 +7,7 @@ import '../../utils/constants/text_constants.dart';
 
 Widget searchTileWidget(MangaEntity manga, BuildContext context) {
   return Container(
-    margin: EdgeInsets.all(Sizes.md),
+    margin: const EdgeInsets.all(Sizes.md),
     height: 230,
     decoration: BoxDecoration(
       color: AppColors.primary,
@@ -24,7 +24,7 @@ Widget searchTileWidget(MangaEntity manga, BuildContext context) {
               top: Sizes.md,
               bottom: Sizes.md,
             ),
-            child: Container(
+            child: SizedBox(
               height: 200,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(14),

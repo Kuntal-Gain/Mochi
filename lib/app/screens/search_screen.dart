@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mochi/app/screens/manga_details_screen.dart';
-import 'package:mochi/utils/constants/text_constants.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../data/models/manga_model.dart';
@@ -13,7 +12,6 @@ import '../../utils/constants/size_constants.dart';
 import '../cubit/feed/feed_cubit.dart';
 import 'package:http/http.dart' as http;
 
-import '../cubit/manga/manga_cubit.dart';
 import '../widgets/search_tile_widget.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -31,7 +29,7 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   List<String> results = [];
-  TextEditingController _searchController = TextEditingController();
+  final TextEditingController _searchController = TextEditingController();
 
   // Add this import if not already present
   Map<String, MangaEntity> mangaData = {};
@@ -49,7 +47,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
     final response = await http.get(
       Uri.parse(
-          'https://mangaapi-production-39b0.up.railway.app/api/search/${query}'),
+          'https://mangaapi-production-39b0.up.railway.app/api/search/$query'),
     );
 
     if (response.statusCode == 200) {
@@ -99,26 +97,24 @@ class _SearchScreenState extends State<SearchScreen> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
+          SizedBox(
             height: 120,
-            child: Container(
-              child: Image.asset(
-                'assets/logo.jpg',
-                height: Sizes.imageMd,
-                width: Sizes.imageMd,
-              ),
+            child: Image.asset(
+              'assets/logo.jpg',
+              height: Sizes.imageMd,
+              width: Sizes.imageMd,
             ),
           ),
 
           // searchbar
           Container(
             height: 60,
-            padding: EdgeInsets.symmetric(horizontal: Sizes.md),
-            margin: EdgeInsets.symmetric(horizontal: Sizes.md),
+            padding: const EdgeInsets.symmetric(horizontal: Sizes.md),
+            margin: const EdgeInsets.symmetric(horizontal: Sizes.md),
             decoration: BoxDecoration(
               color: AppColors.white,
               borderRadius: BorderRadius.circular(14),
-              boxShadow: [
+              boxShadow: const [
                 BoxShadow(
                   color: Color(0xffc2c2c2),
                   blurRadius: 1,
@@ -131,7 +127,7 @@ class _SearchScreenState extends State<SearchScreen> {
                 Expanded(
                   child: TextField(
                     controller: _searchController,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       hintText: 'Search for Mangas',
                       border: InputBorder.none,
                     ),
@@ -151,26 +147,22 @@ class _SearchScreenState extends State<SearchScreen> {
               ],
             ),
           ),
-          SizedBox(height: Sizes.md),
+          const SizedBox(height: Sizes.md),
           BlocBuilder<FeedCubit, FeedState>(
             builder: (context, state) {
               if (state is FeedLoading) {
-                return Center(child: CircularProgressIndicator());
+                return const Center(child: CircularProgressIndicator());
               }
 
               if (state is FeedLoadedAll) {
-                final feed = state.mangaList;
-
-                print(results);
-
                 if (_searchController.text.isEmpty) {
-                  return Center(
+                  return const Center(
                     child: Text('Search for Manga'),
                   );
                 }
 
                 if (isSearching && results.isEmpty) {
-                  return Center(child: CircularProgressIndicator());
+                  return const Center(child: CircularProgressIndicator());
                 }
 
                 return Expanded(
@@ -182,7 +174,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
                       if (manga == null) {
                         return Container(
-                          margin: EdgeInsets.all(Sizes.md),
+                          margin: const EdgeInsets.all(Sizes.md),
                           height: 230,
                           decoration: BoxDecoration(
                             color: Colors.grey[300],
@@ -196,7 +188,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                 Expanded(
                                   flex: 1,
                                   child: Padding(
-                                    padding: EdgeInsets.only(
+                                    padding: const EdgeInsets.only(
                                       left: Sizes.md,
                                       top: Sizes.md,
                                       bottom: Sizes.md,
@@ -213,7 +205,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                 Expanded(
                                   flex: 2,
                                   child: Padding(
-                                    padding: EdgeInsets.all(16.0),
+                                    padding: const EdgeInsets.all(16.0),
                                     child: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
@@ -221,23 +213,27 @@ class _SearchScreenState extends State<SearchScreen> {
                                         Container(
                                           height: 30,
                                           color: Colors.grey[200],
-                                          margin: EdgeInsets.only(bottom: 8),
+                                          margin:
+                                              const EdgeInsets.only(bottom: 8),
                                         ),
                                         Container(
                                           height: 20,
                                           width: 150,
                                           color: Colors.grey[200],
-                                          margin: EdgeInsets.only(bottom: 16),
+                                          margin:
+                                              const EdgeInsets.only(bottom: 16),
                                         ),
                                         Container(
                                           height: 20,
                                           color: Colors.grey[200],
-                                          margin: EdgeInsets.only(bottom: 8),
+                                          margin:
+                                              const EdgeInsets.only(bottom: 8),
                                         ),
                                         Container(
                                           height: 20,
                                           color: Colors.grey[200],
-                                          margin: EdgeInsets.only(bottom: 8),
+                                          margin:
+                                              const EdgeInsets.only(bottom: 8),
                                         ),
                                       ],
                                     ),
@@ -268,7 +264,7 @@ class _SearchScreenState extends State<SearchScreen> {
                 );
               }
 
-              return SizedBox();
+              return const SizedBox();
             },
           ),
         ],

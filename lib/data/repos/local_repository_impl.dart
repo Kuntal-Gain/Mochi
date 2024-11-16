@@ -50,4 +50,10 @@ class LocalRepositoryImpl implements LocalRepository {
 
   @override
   Future<void> logoutUser() async => dataSource.logoutUser();
+
+  @override
+  Future<UserEntity> getUser() async => dataSource.getUser();
+
+  @override
+  Future<bool> isSignIn() async => dataSource.isSignIn();
 }

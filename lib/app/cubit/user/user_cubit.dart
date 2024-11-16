@@ -1,55 +1,25 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:mochi/domain/usecases/user/logout_user_usecase.dart';
+import 'package:mochi/domain/usecases/user/get_user_usecase.dart';
 
 import '../../../domain/entities/user_entity.dart';
-import '../../../domain/usecases/user/login_user_usecase.dart';
-import '../../../domain/usecases/user/register_user_usecase.dart';
 
 part 'user_state.dart';
 
 class UserCubit extends Cubit<UserState> {
-  final LoginUserUseCase loginUserUseCase;
-  final RegisterUserUseCase signupUserUseCase;
-  final LogoutUserUseCase logoutUserUseCase;
+  final GetUserUsecase getUserUsecase;
 
-  UserCubit({
-    required this.loginUserUseCase,
-    required this.signupUserUseCase,
-    required this.logoutUserUseCase,
-  }) : super(UserInitial());
+  UserCubit({required this.getUserUsecase}) : super(UserInitial());
 
-  Future<void> login(UserEntity user) async {
+  /// Fetch user data
+  Future<void> fetchUser() async {
+    emit(UserLoading());
     try {
-      emit(UserLoading());
-      await loginUserUseCase(user.email, user.password);
-      emit(UserAuthenticated(user: user));
+      // Execute the use case to fetch user data
+      final user = await getUserUsecase.call();
+      emit(UserLoaded(user: user));
     } catch (e) {
       emit(UserError(message: e.toString()));
     }
-  }
-
-  Future<void> signup(UserEntity user) async {
-    try {
-      emit(UserLoading());
-      await signupUserUseCase(user);
-      emit(UserAuthenticated(user: user));
-    } catch (e) {
-      emit(UserError(message: e.toString()));
-    }
-  }
-
-  Future<void> logout() async {
-    try {
-      emit(UserLoading());
-      await logoutUserUseCase();
-      emit(UserUnauthenticated());
-    } catch (e) {
-      emit(UserError(message: e.toString()));
-    }
-  }
-
-  void appStarted() {
-    emit(UserUnauthenticated());
   }
 }

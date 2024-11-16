@@ -31,7 +31,7 @@ class _MangaDetailsScreenState extends State<MangaDetailsScreen> {
             onPressed: () {
               Navigator.pop(context);
             },
-            icon: Icon(Icons.arrow_back_ios_new_rounded),
+            icon: const Icon(Icons.arrow_back_ios_new_rounded),
           ),
         ),
         body: SingleChildScrollView(
@@ -40,7 +40,7 @@ class _MangaDetailsScreenState extends State<MangaDetailsScreen> {
             children: [
               sizeVer(12),
               Center(
-                child: Container(
+                child: SizedBox(
                   height: 200,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(12),
@@ -99,8 +99,8 @@ class _MangaDetailsScreenState extends State<MangaDetailsScreen> {
                         child: Container(
                           height: 60,
                           width: 150,
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 8),
                           decoration: BoxDecoration(
                             color: AppColors.primary,
                             borderRadius: BorderRadius.circular(12),
@@ -124,13 +124,11 @@ class _MangaDetailsScreenState extends State<MangaDetailsScreen> {
                       decoration: BoxDecoration(
                         color: AppColors.white,
                         borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: Color(0xffc2c2c2)),
+                        border: Border.all(color: const Color(0xffc2c2c2)),
                       ),
                       child: IconButton(
-                        onPressed: () {
-                          print('bookmark');
-                        },
-                        icon: Icon(
+                        onPressed: () {},
+                        icon: const Icon(
                           Icons.bookmark_border,
                           color: AppColors.black,
                         ),
@@ -166,8 +164,8 @@ class _MangaDetailsScreenState extends State<MangaDetailsScreen> {
                   height: widget.manga.chapterList.length < 5
                       ? 5 * 45
                       : 400, // Fixed height for chapter list
-                  margin: EdgeInsets.all(12),
-                  padding: EdgeInsets.all(12),
+                  margin: const EdgeInsets.all(12),
+                  padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
                     color: AppColors.primary,
                     borderRadius: BorderRadius.circular(12),
@@ -181,7 +179,7 @@ class _MangaDetailsScreenState extends State<MangaDetailsScreen> {
                         return Column(
                           children: [
                             ListTile(
-                              leading: Icon(
+                              leading: const Icon(
                                 Icons.menu_book_rounded,
                                 color: AppColors.black,
                               ),
@@ -205,7 +203,7 @@ class _MangaDetailsScreenState extends State<MangaDetailsScreen> {
                                 ),
                               ),
                             ),
-                            Divider(
+                            const Divider(
                               color: AppColors.black,
                             ),
                           ],

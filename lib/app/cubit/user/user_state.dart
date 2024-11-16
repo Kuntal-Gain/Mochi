@@ -11,18 +11,14 @@ class UserInitial extends UserState {}
 
 class UserLoading extends UserState {}
 
-class UserAuthenticated extends UserState {
+class UserLoaded extends UserState {
   final UserEntity user;
 
-  const UserAuthenticated({
-    required this.user,
-  });
+  const UserLoaded({required this.user});
 
   @override
   List<Object> get props => [user];
 }
-
-class UserUnauthenticated extends UserState {}
 
 class UserError extends UserState {
   final String message;

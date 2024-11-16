@@ -1,11 +1,19 @@
+// ignore_for_file: annotate_overrides, overridden_fields, duplicate_ignore
+
 import '../../domain/entities/chapter_entity.dart';
 
 class ChapterModel extends ChapterEntity {
+  // ignore: overridden_fields
+  final String title;
+  final String currentChapter;
+  final List<String> chapterIds;
+  final List<String> imageUrls;
+
   const ChapterModel({
-    required String title,
-    required String currentChapter,
-    required List<String> chapterIds,
-    required List<String> imageUrls,
+    required this.title,
+    required this.currentChapter,
+    required this.chapterIds,
+    required this.imageUrls,
   }) : super(
           title: title,
           currentChapter: currentChapter,
